@@ -1,0 +1,18 @@
+GET http://admin:admin@192.168.0.101:8112/authenticationTest.html?csrf
+Accept: application/json
+
+###
+POST http://192.168.0.101:8112/app/rest/projects
+Content-Type:application/json
+X-TC-CSRF-Token:43b4d5e3-9753-4c22-b034-2b4cafd44dd9
+Accept: application/json
+
+{
+"parentProject": {
+"locator": "_Root"
+},
+"name": "name2",
+"id": "id",
+"copyAllAssociatedSettings": true
+}
+
