@@ -2,8 +2,10 @@ package com.example.teamcity.api;
 
 import com.example.teamcity.api.models.BuildType;
 import com.example.teamcity.api.models.Project;
+import com.example.teamcity.api.models.Roles;
 import com.example.teamcity.api.models.User;
 import com.example.teamcity.api.requests.CheckedRequests;
+import com.example.teamcity.api.requests.UncheckedRequests;
 import com.example.teamcity.api.requests.unchecked.UncheckedBase;
 import com.example.teamcity.api.spec.Specifications;
 import org.apache.http.HttpStatus;
@@ -50,25 +52,54 @@ public class BuildTypeTest extends BaseApiTest {
 
     @Test(description = "Project admin should be able to create build type for their project", groups = {"Positive", "Roles"})
     public void projectAdminCreatesBuildTypeTest() {
-        step("Create user");
         step("Create project");
-        step("Grant user PROJECT_ADMIN role in project");
+        superUserCheckRequests.getRequest(PROJECTS).create(testData.getProject());
 
-        step("Create buildType for project by user (PROJECT_ADMIN)");
-        step("Check buildType was created successfully");
+        step("Create user-admin for project");
+        testData.getUser().setRoles(generate(Roles.class, "PROJECT_ADMIN", "p:" + testData.getProject().getId()));
+        superUserCheckRequests.getRequest(USERS).create(testData.getUser());
+
+        step("Create buildType by user-admin for project");
+        var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
+        var createdBuildTypeId = userCheckRequests.<BuildType>getRequest(BUILD_TYPES).create(testData.getBuildType()).getId();
+
+        step("Read created buildType");
+        var createdBuildType = userCheckRequests.<BuildType>getRequest(BUILD_TYPES).read(createdBuildTypeId);
+
+        step("Check buildType was created with correct data");
+        softy.assertEquals(testData.getBuildType().getName(), createdBuildType.getName(),
+                "Build type name is not correct");
+        softy.assertEquals(testData.getProject().getId(), createdBuildType.getProject().getId(),
+                "Project for build type is not correct");
     }
 
     @Test(description = "Project admin should not be able to create build type for not their project", groups = {"Negative", "Roles"})
     public void projectAdminCreatesBuildTypeForAnotherUserProjectTest() {
-        step("Create user1");
+
         step("Create project1");
-        step("Grant user1 PROJECT_ADMIN role in project1");
+        superUserCheckRequests.getRequest(PROJECTS).create(testData.getProject());
 
-        step("Create user2");
+        step("Create user1-admin for project1");
+        testData.getUser().setRoles(generate(Roles.class, "PROJECT_ADMIN", "p:" + testData.getProject().getId()));
+        superUserCheckRequests.getRequest(USERS).create(testData.getUser());
+
         step("Create project2");
-        step("Grant user2 PROJECT_ADMIN role in project2");
+        var project2 = generate(Project.class);
+        superUserCheckRequests.getRequest(PROJECTS).create(project2);
 
-        step("Create buildType for project1 by user2");
-        step("Check buildType was not created with forbidden code");
+        step("Create user2-admin for project2");
+        var user2 = generate(User.class);
+        user2.setRoles(generate(Roles.class, "PROJECT_ADMIN", "p:" + project2.getId()));
+        superUserCheckRequests.getRequest(USERS).create(user2);
+
+        step("Create buildType for project1 by user2 and check it was not created with forbidden code");
+        var buildType = generate(Arrays.asList(testData.getProject()), BuildType.class);
+        var userUncheckedRequest = new UncheckedRequests(Specifications.authSpec(user2));
+        userUncheckedRequest.getRequest(BUILD_TYPES)
+                .create(buildType)
+                .then().assertThat().statusCode(HttpStatus.SC_FORBIDDEN)
+                .body(Matchers.containsString(("You do not have enough permissions to edit project with id: %s\n" +
+                        "Access denied. Check the user has enough permissions to perform the operation.")
+                        .formatted(testData.getProject().getId())));
     }
 }
