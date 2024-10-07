@@ -1,9 +1,6 @@
 package com.example.teamcity.api;
 
-import com.example.teamcity.api.models.BuildType;
-import com.example.teamcity.api.models.Project;
-import com.example.teamcity.api.models.Roles;
-import com.example.teamcity.api.models.User;
+import com.example.teamcity.api.models.*;
 import com.example.teamcity.api.requests.CheckedRequests;
 import com.example.teamcity.api.requests.UncheckedRequests;
 import com.example.teamcity.api.requests.unchecked.UncheckedBase;
@@ -17,6 +14,9 @@ import java.util.Arrays;
 import static com.example.teamcity.api.enums.Endpoint.*;
 import static com.example.teamcity.api.generators.TestDataGenerator.generate;
 import static io.qameta.allure.Allure.step;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
+
 
 @Test(groups = {"Regression"})
 public class BuildTypeTest extends BaseApiTest {
@@ -101,5 +101,38 @@ public class BuildTypeTest extends BaseApiTest {
                 .body(Matchers.containsString(("You do not have enough permissions to edit project with id: %s\n" +
                         "Access denied. Check the user has enough permissions to perform the operation.")
                         .formatted(testData.getProject().getId())));
+    }
+
+    @Test(description = "User should be able to run build", groups = {"Positive"})
+    public void userRunsBuildTypeTest() {
+        step("Create project");
+        superUserCheckRequests.getRequest(PROJECTS).create(testData.getProject());
+
+        step("Create user");
+        superUserCheckRequests.getRequest(USERS).create(testData.getUser());
+
+        step("Create buildType with step");
+        var buildSteps = generate(Steps.class);
+        buildSteps.getStep().get(0).getProperties().setProperty(Arrays.asList(
+                generate(StepProperty.class, "script.content", "echo \"Hello world\""),
+                generate(StepProperty.class, "teamcity.step.mode", "default"),
+                generate(StepProperty.class, "use.custom.script", "true")
+        ));
+        testData.getBuildType().setSteps(buildSteps);
+        var userCheckedRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
+        userCheckedRequests.getRequest(BUILD_TYPES).create(testData.getBuildType());
+
+        step("Run build");
+        var buildQueue = generate(Arrays.asList(testData.getBuildType()), BuildQueue.class);
+        var createdBuildId = userCheckedRequests.<Build>getRequest(BUILD_QUEUES).create(buildQueue).getId();
+
+        step("Check SUCCESS status for build");
+        await()
+                .atMost(20, SECONDS)
+                .pollInterval(2, SECONDS)
+                .until(() -> {
+                    var status = userCheckedRequests.<Build>getRequest(BUILDS).read(createdBuildId.toString()).getStatus();
+                    return status.equals("SUCCESS");
+                });
     }
 }
