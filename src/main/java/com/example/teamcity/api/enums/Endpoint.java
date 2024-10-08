@@ -7,12 +7,13 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum Endpoint {
-    BUILD_TYPES("/app/rest/buildTypes", BuildType.class),
-    PROJECTS("/app/rest/projects", Project.class),
-    USERS("/app/rest/users", User.class),
-    BUILD_QUEUES("/app/rest/buildQueue", Build.class),
-    BUILDS("/app/rest/builds", Build.class);
+    BUILD_TYPES("/app/rest/buildTypes", BuildType.class, BuildTypeList.class),
+    PROJECTS("/app/rest/projects", Project.class, ProjectList.class),
+    USERS("/app/rest/users", User.class, UserList.class),
+    BUILD_QUEUES("/app/rest/buildQueue", Build.class, BuildList.class),
+    BUILDS("/app/rest/builds", Build.class, BuildList.class);
 
     private final String url;
     private final Class<? extends BaseModel> modelClass;
+    private final Class<? extends BaseModel> searchResultsModelClass;
 }

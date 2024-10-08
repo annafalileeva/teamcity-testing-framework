@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class StepProperties extends BaseModel {
-    private List<StepProperty> property;
+public class BuildList extends BaseModel {
+    private int count;
+    private List<Build> build;
 }
