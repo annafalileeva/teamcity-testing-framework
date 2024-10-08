@@ -11,7 +11,8 @@ public enum Endpoint {
     PROJECTS("/app/rest/projects", Project.class, ProjectList.class),
     USERS("/app/rest/users", User.class, UserList.class),
     BUILD_QUEUES("/app/rest/buildQueue", Build.class, BuildList.class),
-    BUILDS("/app/rest/builds", Build.class, BuildList.class);
+    BUILDS("/app/rest/builds", Build.class, BuildList.class),
+    AUTH_SETTINGS("/app/rest/server/authSettings", AuthSettings.class, AuthSettings.class);
 
     private final String url;
     private final Class<? extends BaseModel> modelClass;

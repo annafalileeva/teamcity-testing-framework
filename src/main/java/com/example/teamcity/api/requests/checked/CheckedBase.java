@@ -7,12 +7,13 @@ import com.example.teamcity.api.models.BaseModel;
 import com.example.teamcity.api.requests.CrudInterface;
 import com.example.teamcity.api.requests.Request;
 import com.example.teamcity.api.requests.SearchInterface;
+import com.example.teamcity.api.requests.ServerSettingsInterface;
 import com.example.teamcity.api.requests.unchecked.UncheckedBase;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
 
 @SuppressWarnings("unchecked")
-public final class CheckedBase<T extends BaseModel> extends Request implements CrudInterface, SearchInterface {
+public final class CheckedBase<T extends BaseModel> extends Request implements CrudInterface, SearchInterface, ServerSettingsInterface {
     private final UncheckedBase uncheckedBase;
 
     public CheckedBase(RequestSpecification spec, Endpoint endpoint) {
@@ -60,5 +61,21 @@ public final class CheckedBase<T extends BaseModel> extends Request implements C
                 .search(locator, value)
                 .then().assertThat().statusCode(HttpStatus.SC_OK)
                 .extract().as(endpoint.getSearchResultsModelClass());
+    }
+
+    @Override
+    public T readSettings() {
+        return (T) uncheckedBase
+                .readSettings()
+                .then().assertThat().statusCode(HttpStatus.SC_OK)
+                .extract().as(endpoint.getModelClass());
+    }
+
+    @Override
+    public T updateSettings(BaseModel model) {
+        return (T) uncheckedBase
+                .updateSettings(model)
+                .then().assertThat().statusCode(HttpStatus.SC_OK)
+                .extract().as(endpoint.getModelClass());
     }
 }

@@ -114,9 +114,9 @@ public class BuildTypeTest extends BaseApiTest {
         step("Create buildType with step");
         var buildSteps = generate(Steps.class);
         buildSteps.getStep().get(0).getProperties().setProperty(Arrays.asList(
-                generate(StepProperty.class, "script.content", "echo \"Hello world\""),
-                generate(StepProperty.class, "teamcity.step.mode", "default"),
-                generate(StepProperty.class, "use.custom.script", "true")
+                generate(Property.class, "script.content", "echo \"Hello world\""),
+                generate(Property.class, "teamcity.step.mode", "default"),
+                generate(Property.class, "use.custom.script", "true")
         ));
         testData.getBuildType().setSteps(buildSteps);
         var userCheckedRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));

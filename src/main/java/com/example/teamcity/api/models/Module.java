@@ -6,13 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class StepProperties extends BaseModel {
-    private List<StepProperty> property;
+public class Module extends BaseModel{
+    private String name;
+    private Properties properties;
 }
