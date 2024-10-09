@@ -19,13 +19,16 @@ public class SearchTest extends BaseApiTest{
         superUserCheckRequests.getRequest(USERS).create(testData.getUser());
         var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
 
-        step("Create project");
+        step("Create project1");
         userCheckRequests.getRequest(PROJECTS).create(testData.getProject());
 
-        step("Search project by name");
+        step("Create project2");
+        userCheckRequests.getRequest(PROJECTS).create(generate(Project.class));
+
+        step("Search project1 by name");
         var foundProjests = userCheckRequests.<ProjectList>getRequest(PROJECTS).search(NAME, testData.getProject().getName());
 
-        step("Check that project in search results");
+        step("Check that project1 in search results");
         softy.assertEquals(foundProjests.getCount(), 1);
         softy.assertEquals(foundProjests.getProject().get(0).getId(), testData.getProject().getId(),
                 "Incorrent project in search results");
