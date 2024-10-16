@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 
 import static com.example.teamcity.api.enums.Endpoint.*;
+import static com.example.teamcity.api.enums.Role.PROJECT_ADMIN;
 import static com.example.teamcity.api.generators.TestDataGenerator.generate;
 import static io.qameta.allure.Allure.step;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -56,7 +57,7 @@ public class BuildTypeTest extends BaseApiTest {
         superUserCheckRequests.getRequest(PROJECTS).create(testData.getProject());
 
         step("Create user-admin for project");
-        testData.getUser().setRoles(generate(Roles.class, "PROJECT_ADMIN", "p:" + testData.getProject().getId()));
+        testData.getUser().setRoles(generate(Roles.class, PROJECT_ADMIN.getId(), PROJECT_ADMIN.getScope() + testData.getProject().getId()));
         superUserCheckRequests.getRequest(USERS).create(testData.getUser());
 
         step("Create buildType by user-admin for project");
@@ -80,7 +81,7 @@ public class BuildTypeTest extends BaseApiTest {
         superUserCheckRequests.getRequest(PROJECTS).create(testData.getProject());
 
         step("Create user1-admin for project1");
-        testData.getUser().setRoles(generate(Roles.class, "PROJECT_ADMIN", "p:" + testData.getProject().getId()));
+        testData.getUser().setRoles(generate(Roles.class, PROJECT_ADMIN.getId(), PROJECT_ADMIN.getScope() + testData.getProject().getId()));
         superUserCheckRequests.getRequest(USERS).create(testData.getUser());
 
         step("Create project2");
@@ -89,7 +90,7 @@ public class BuildTypeTest extends BaseApiTest {
 
         step("Create user2-admin for project2");
         var user2 = generate(User.class);
-        user2.setRoles(generate(Roles.class, "PROJECT_ADMIN", "p:" + project2.getId()));
+        user2.setRoles(generate(Roles.class, PROJECT_ADMIN.getId(), PROJECT_ADMIN.getScope() + project2.getId()));
         superUserCheckRequests.getRequest(USERS).create(user2);
 
         step("Create buildType for project1 by user2 and check it was not created with forbidden code");

@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static com.example.teamcity.api.enums.Role.SYSTEM_ADMIN;
+
 @Builder
 @Data
 @AllArgsConstructor
@@ -15,8 +17,8 @@ import lombok.NoArgsConstructor;
 public class Role extends BaseModel {
     @Builder.Default
     @Parameterizable
-    private String roleId = "SYSTEM_ADMIN";
+    private String roleId = SYSTEM_ADMIN.getId();
     @Builder.Default
     @Parameterizable
-    private String scope = "g";
+    private String scope = SYSTEM_ADMIN.getScope();
 }
