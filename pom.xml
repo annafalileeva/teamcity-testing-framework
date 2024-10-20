@@ -19,6 +19,7 @@
         <lombok.version>1.18.30</lombok.version>
         <jackson.version>2.17.2</jackson.version>
         <awaitility.version>4.2.2</awaitility.version>
+        <selenide.version>7.4.3</selenide.version>
     </properties>
 
     <dependencies>
@@ -39,6 +40,11 @@
             <artifactId>allure-selenide</artifactId>
             <version>${allure.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.codeborne</groupId>
+            <artifactId>selenide</artifactId>
+            <version>${selenide.version}</version>
         </dependency>
         <dependency>
             <groupId>org.testng</groupId>
