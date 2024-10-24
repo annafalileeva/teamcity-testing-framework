@@ -29,7 +29,7 @@ public class BuildTypeTest extends BaseApiTest {
         userCheckRequests.<Project>getRequest(PROJECTS).create(testData.getProject());
 
         userCheckRequests.getRequest(BUILD_TYPES).create(testData.getBuildType());
-        var createdBuildType = userCheckRequests.<BuildType>getRequest(BUILD_TYPES).read(testData.getBuildType().getId());
+        var createdBuildType = userCheckRequests.<BuildType>getRequest(BUILD_TYPES).read("id:"+ testData.getBuildType().getId());
 
         softy.assertEquals(testData.getBuildType().getName(), createdBuildType.getName(), "Build type name is not correct");
     }
@@ -65,7 +65,7 @@ public class BuildTypeTest extends BaseApiTest {
         var createdBuildTypeId = userCheckRequests.<BuildType>getRequest(BUILD_TYPES).create(testData.getBuildType()).getId();
 
         step("Read created buildType");
-        var createdBuildType = userCheckRequests.<BuildType>getRequest(BUILD_TYPES).read(createdBuildTypeId);
+        var createdBuildType = userCheckRequests.<BuildType>getRequest(BUILD_TYPES).read("id:"+ createdBuildTypeId);
 
         step("Check buildType was created with correct data");
         softy.assertEquals(testData.getBuildType().getName(), createdBuildType.getName(),
@@ -132,7 +132,7 @@ public class BuildTypeTest extends BaseApiTest {
                 .atMost(20, SECONDS)
                 .pollInterval(2, SECONDS)
                 .until(() -> {
-                    var status = userCheckedRequests.<Build>getRequest(BUILDS).read(createdBuildId.toString()).getStatus();
+                    var status = userCheckedRequests.<Build>getRequest(BUILDS).read("id:"+ createdBuildId.toString()).getStatus();
                     return status.equals("SUCCESS");
                 });
     }
