@@ -1,7 +1,6 @@
 package com.example.teamcity.api.requests.unchecked;
 
 import com.example.teamcity.api.enums.Endpoint;
-import com.example.teamcity.api.enums.Locator;
 import com.example.teamcity.api.models.BaseModel;
 import com.example.teamcity.api.requests.CrudInterface;
 import com.example.teamcity.api.requests.Request;
@@ -51,11 +50,11 @@ public class UncheckedBase extends Request implements CrudInterface, SearchInter
     }
 
     @Override
-    public Response search(Locator locator, String value) {
+    public Response search(String locator) {
         return RestAssured
                 .given()
                 .spec(spec)
-                .get(endpoint.getUrl() + "/?locator=" + locator.getLocator() + ":" + value);
+                .get(endpoint.getUrl() + "/?locator=" + locator);
     }
 
     @Override
