@@ -5,7 +5,7 @@ import com.example.teamcity.api.models.Build;
 import com.example.teamcity.ui.pages.project.ProjectPage;
 import com.example.teamcity.ui.pages.admin.buildStep.EditCommandLineBuildStepPage;
 import com.example.teamcity.ui.pages.admin.buildType.EditBuildStepsPage;
-import com.example.teamcity.ui.pages.build.ViewBuildPage;
+import com.example.teamcity.ui.pages.build.BuildPage;
 import org.testng.annotations.Test;
 
 import static com.example.teamcity.api.enums.Endpoint.*;
@@ -37,7 +37,7 @@ public class RunBuildTypeTest extends BaseUITest {
         softy.assertNotNull(createdBuild);
         waitForBuildStatus(createdBuild.getId(), "SUCCESS");
 
-        ViewBuildPage
+        BuildPage
                 .open(testData.getBuildType().getId(), createdBuild.getId())
                 .buildStatus.shouldBe(Condition.exactText("Success"));
     }
