@@ -34,7 +34,7 @@ public class RunBuildTypeTest extends BaseUITest {
         var createdBuild = superUserCheckRequests.<Build>getRequest(BUILDS).read(
                 "buildType:id:" + testData.getBuildType().getId() + ",number:1",
                 10, SECONDS, 1, SECONDS);
-        softy.assertNotNull(createdBuild);
+        softy.assertNotNull(createdBuild, "Incorrect build");
         waitForBuildStatus(createdBuild.getId(), "SUCCESS");
 
         BuildPage

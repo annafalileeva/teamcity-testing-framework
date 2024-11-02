@@ -27,13 +27,13 @@ public class CreateBuildTypeTest extends BaseUITest {
 
         var createdBuildType = superUserCheckRequests.<BuildType>getRequest(BUILD_TYPES).read(
                 "name:" + testData.getBuildType().getName(), 10, SECONDS, 1, SECONDS);
-        softy.assertNotNull(createdBuildType);
+        softy.assertNotNull(createdBuildType, "Incorrect build type.");
 
         var foundBuildType = ProjectPage
                 .open(testData.getProject().getId())
                 .getBuildTypes()
                 .stream().anyMatch(buildType -> buildType.getName().text().equals(testData.getBuildType().getName()));
-        softy.assertTrue(foundBuildType);
+        softy.assertTrue(foundBuildType, "Build type wasn't found.");
     }
 
     @Test(description = "User should be able to create build type manually", groups = {"Positive", "CRUD"})
@@ -47,13 +47,13 @@ public class CreateBuildTypeTest extends BaseUITest {
 
         var createdBuildType = superUserCheckRequests.<BuildType>getRequest(BUILD_TYPES).read(
                 "name:" + testData.getBuildType().getName(), 10, SECONDS, 1, SECONDS);
-        softy.assertNotNull(createdBuildType);
+        softy.assertNotNull(createdBuildType, "Incorrect build type.");
 
         var foundBuildType = ProjectPage
                 .open(testData.getProject().getId())
                 .getBuildTypes()
                 .stream().anyMatch(buildType -> buildType.getName().text().equals(testData.getBuildType().getName()));
-        softy.assertTrue(foundBuildType);
+        softy.assertTrue(foundBuildType, "Build type wasn't found.");
     }
 
     @Test(description = "User should not be able to create build type without a repository URL", groups = {"Negative", "CRUD"})
@@ -70,7 +70,7 @@ public class CreateBuildTypeTest extends BaseUITest {
                 .urlError.shouldHave(Condition.exactText("URL must not be empty"));
 
         var buildTypesCountAfter = getBuildTypesCount(testData.getProject().getId());
-        softy.assertEquals(buildTypesCountBefore, buildTypesCountAfter);
+        softy.assertEquals(buildTypesCountBefore, buildTypesCountAfter, "The number of build types is not equal.");
     }
 
     @Test(description = "User should not be able to create build type without name and id", groups = {"Negative", "CRUD"})
@@ -87,6 +87,6 @@ public class CreateBuildTypeTest extends BaseUITest {
                 .checkFieldsError("Name must not be empty", "The ID field must not be empty.");
 
         var buildTypesCountAfter = getBuildTypesCount(testData.getProject().getId());
-        softy.assertEquals(buildTypesCountBefore, buildTypesCountAfter);
+        softy.assertEquals(buildTypesCountBefore, buildTypesCountAfter, "The number of build types is not equal.");
     }
 }
