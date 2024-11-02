@@ -4,7 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.example.teamcity.api.models.BuildType;
-import com.example.teamcity.ui.pages.admin.CreateBasePage;
+import com.example.teamcity.ui.pages.admin.project.CreateBasePage;
 
 import static com.codeborne.selenide.Selenide.$;
 

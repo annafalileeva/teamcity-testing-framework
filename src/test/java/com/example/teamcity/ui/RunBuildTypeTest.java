@@ -2,7 +2,7 @@ package com.example.teamcity.ui;
 
 import com.codeborne.selenide.Condition;
 import com.example.teamcity.api.models.Build;
-import com.example.teamcity.ui.pages.ProjectPage;
+import com.example.teamcity.ui.pages.project.ProjectPage;
 import com.example.teamcity.ui.pages.admin.buildStep.EditCommandLineBuildStepPage;
 import com.example.teamcity.ui.pages.admin.buildType.EditBuildStepsPage;
 import com.example.teamcity.ui.pages.build.ViewBuildPage;
@@ -31,14 +31,14 @@ public class RunBuildTypeTest extends BaseUITest {
                 .open(testData.getProject().getId())
                 .runBuild(testData.getBuildType().getName());
 
-        var createdBuildId = superUserCheckRequests.<Build>getRequest(BUILDS).read(
+        var createdBuild = superUserCheckRequests.<Build>getRequest(BUILDS).read(
                 "buildType:id:" + testData.getBuildType().getId() + ",number:1",
-                10, SECONDS, 1, SECONDS).getId();
-        softy.assertNotNull(createdBuildId);
-        waitForBuildStatus(createdBuildId, "SUCCESS");
+                10, SECONDS, 1, SECONDS);
+        softy.assertNotNull(createdBuild);
+        waitForBuildStatus(createdBuild.getId(), "SUCCESS");
 
         ViewBuildPage
-                .open(testData.getBuildType().getId(), createdBuildId)
-                .buildStatus.shouldBe(Condition.exactText("Success"));;
+                .open(testData.getBuildType().getId(), createdBuild.getId())
+                .buildStatus.shouldBe(Condition.exactText("Success"));
     }
 }

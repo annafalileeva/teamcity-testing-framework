@@ -1,11 +1,11 @@
-package com.example.teamcity.ui.pages.admin;
+package com.example.teamcity.ui.pages.admin.project;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.Selenide.$;
 
-public class CreateProjectPage extends CreateBasePage{
+public class CreateProjectPage extends CreateBasePage {
     private static final String CREATE_PROJECT_MODE="createProjectMenu";
 
     private SelenideElement projectNameInput = $("#projectName");

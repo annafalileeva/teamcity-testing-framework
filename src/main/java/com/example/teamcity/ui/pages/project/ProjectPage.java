@@ -1,10 +1,11 @@
-package com.example.teamcity.ui.pages;
+package com.example.teamcity.ui.pages.project;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.example.teamcity.ui.elements.BuildTypeElement;
+import com.example.teamcity.ui.pages.BasePage;
 
 import java.util.List;
 

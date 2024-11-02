@@ -2,7 +2,7 @@ package com.example.teamcity.ui;
 
 import com.codeborne.selenide.Condition;
 import com.example.teamcity.api.models.BuildType;
-import com.example.teamcity.ui.pages.ProjectPage;
+import com.example.teamcity.ui.pages.project.ProjectPage;
 import com.example.teamcity.ui.pages.admin.buildType.CreateBuildTypePage;
 import org.testng.annotations.Test;
 
