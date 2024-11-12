@@ -1,7 +1,6 @@
 package com.example.teamcity.api.requests.unchecked;
 
 import com.example.teamcity.api.enums.Endpoint;
-import com.example.teamcity.api.enums.Locator;
 import com.example.teamcity.api.models.BaseModel;
 import com.example.teamcity.api.requests.CrudInterface;
 import com.example.teamcity.api.requests.Request;
@@ -26,36 +25,36 @@ public class UncheckedBase extends Request implements CrudInterface, SearchInter
     }
 
     @Override
-    public Response read(String id) {
+    public Response read(String locator) {
         return RestAssured
                 .given()
                 .spec(spec)
-                .get(endpoint.getUrl() + "/id:" + id);
+                .get(endpoint.getUrl() + "/" + locator);
     }
 
     @Override
-    public Response update(String id, BaseModel model) {
+    public Response update(String locator, BaseModel model) {
         return RestAssured
                 .given()
                 .spec(spec)
                 .body(model)
-                .put(endpoint.getUrl() + "/id:" + id);
+                .put(endpoint.getUrl() + "/" + locator);
     }
 
     @Override
-    public Response delete(String id) {
+    public Response delete(String locator) {
         return RestAssured
                 .given()
                 .spec(spec)
-                .delete(endpoint.getUrl() + "/id:" + id);
+                .delete(endpoint.getUrl() + "/" + locator);
     }
 
     @Override
-    public Response search(Locator locator, String value) {
+    public Response search(String locator) {
         return RestAssured
                 .given()
                 .spec(spec)
-                .get(endpoint.getUrl() + "/?locator=" + locator.getLocator() + ":" + value);
+                .get(endpoint.getUrl() + "/?locator=" + locator);
     }
 
     @Override

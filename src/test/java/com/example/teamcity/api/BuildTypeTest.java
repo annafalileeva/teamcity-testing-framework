@@ -14,9 +14,8 @@ import java.util.Arrays;
 import static com.example.teamcity.api.enums.Endpoint.*;
 import static com.example.teamcity.api.enums.Role.PROJECT_ADMIN;
 import static com.example.teamcity.api.generators.TestDataGenerator.generate;
+import static com.example.teamcity.api.requests.helpers.RequestHelper.waitForBuildStatus;
 import static io.qameta.allure.Allure.step;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
 
 
 @Test(groups = {"Regression"})
@@ -29,7 +28,7 @@ public class BuildTypeTest extends BaseApiTest {
         userCheckRequests.<Project>getRequest(PROJECTS).create(testData.getProject());
 
         userCheckRequests.getRequest(BUILD_TYPES).create(testData.getBuildType());
-        var createdBuildType = userCheckRequests.<BuildType>getRequest(BUILD_TYPES).read(testData.getBuildType().getId());
+        var createdBuildType = userCheckRequests.<BuildType>getRequest(BUILD_TYPES).read("id:"+ testData.getBuildType().getId());
 
         softy.assertEquals(testData.getBuildType().getName(), createdBuildType.getName(), "Build type name is not correct");
     }
@@ -65,7 +64,7 @@ public class BuildTypeTest extends BaseApiTest {
         var createdBuildTypeId = userCheckRequests.<BuildType>getRequest(BUILD_TYPES).create(testData.getBuildType()).getId();
 
         step("Read created buildType");
-        var createdBuildType = userCheckRequests.<BuildType>getRequest(BUILD_TYPES).read(createdBuildTypeId);
+        var createdBuildType = userCheckRequests.<BuildType>getRequest(BUILD_TYPES).read("id:"+ createdBuildTypeId);
 
         step("Check buildType was created with correct data");
         softy.assertEquals(testData.getBuildType().getName(), createdBuildType.getName(),
@@ -128,12 +127,6 @@ public class BuildTypeTest extends BaseApiTest {
         var createdBuildId = userCheckedRequests.<Build>getRequest(BUILD_QUEUES).create(buildQueue).getId();
 
         step("Check SUCCESS status for build");
-        await()
-                .atMost(20, SECONDS)
-                .pollInterval(2, SECONDS)
-                .until(() -> {
-                    var status = userCheckedRequests.<Build>getRequest(BUILDS).read(createdBuildId.toString()).getStatus();
-                    return status.equals("SUCCESS");
-                });
+        waitForBuildStatus(createdBuildId, "SUCCESS");
     }
 }
