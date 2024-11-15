@@ -19,12 +19,12 @@ public class BaseTest {
     protected CheckedRequests superUserCheckRequests = new CheckedRequests(Specifications.superUserSpec());
     protected TestData testData;
 
-    @BeforeSuite(alwaysRun = true)
-    public void beforeSuite() {
-        var authSettings = superUserCheckRequests.<AuthSettings>getRequest(AUTH_SETTINGS).readSettings();
-        authSettings.setPerProjectPermissions(true);
-        superUserCheckRequests.<AuthSettings>getRequest(AUTH_SETTINGS).updateSettings(authSettings);
-    }
+//    @BeforeSuite(alwaysRun = true)
+//    public void beforeSuite() {
+//        var authSettings = superUserCheckRequests.<AuthSettings>getRequest(AUTH_SETTINGS).readSettings();
+//        authSettings.setPerProjectPermissions(true);
+//        superUserCheckRequests.<AuthSettings>getRequest(AUTH_SETTINGS).updateSettings(authSettings);
+//    }
 
     @BeforeMethod(alwaysRun = true)
     public void beforeTest() {
