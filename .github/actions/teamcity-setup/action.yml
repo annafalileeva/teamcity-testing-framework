@@ -28,7 +28,7 @@ runs:
       shell: bash
       # Парсить browsers.json и будет docker pull все браузеры
       run: |
-        for browser in $(awk -F'"' '/"image": "/{print $4}' "config/browsers.json"); do
+        for browser in $(awk -F'"' '/"image": "/{print $4}' "selenoid/config/browsers.json"); do
           docker pull $browser
         done
 
@@ -38,7 +38,7 @@ runs:
       run: |
         docker run -d --name selenoid \
         -v /var/run/docker.sock:/var/run/docker.sock \
-        -v $(pwd)/config/:/etc/selenoid/:ro \
+        -v $(pwd)/selenoid/config/:/etc/selenoid/:ro \
         -p 4444:4444 \
         aerokube/selenoid:latest-release
 
