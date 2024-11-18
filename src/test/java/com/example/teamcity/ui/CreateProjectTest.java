@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 
 import static com.example.teamcity.api.enums.Endpoint.PROJECTS;
 import static io.qameta.allure.Allure.step;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 @Test(groups = {"Regression"})
 public class CreateProjectTest extends BaseUITest {
@@ -24,7 +25,8 @@ public class CreateProjectTest extends BaseUITest {
                 .setupProject(testData.getProject().getName(), testData.getBuildType().getName());
         // проверка состояния API
         // (корректность отправки данных с UI на API)
-        var createdProject = superUserCheckRequests.<Project>getRequest(PROJECTS).read("name:" + testData.getProject().getName());
+        var createdProject = superUserCheckRequests.<Project>getRequest(PROJECTS).read("name:" + testData.getProject().getName(),
+                10, SECONDS, 1, SECONDS);
         softy.assertNotNull(createdProject);
         // проверка состояния UI
         // (корректность считывания данных и отображение данных на UI)
