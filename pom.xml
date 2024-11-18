@@ -94,6 +94,11 @@
             <artifactId>swagger-coverage-rest-assured</artifactId>
             <version>${swagger-coverage-version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-rest-assured</artifactId>
+            <version>${allure.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
