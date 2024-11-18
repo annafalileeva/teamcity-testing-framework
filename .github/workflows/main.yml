@@ -1,6 +1,8 @@
 name: TeamCity deployment
 
-on: push
+on:
+  push
+  workflow_dispatch
 
 jobs:
   # Собирается бекенд и деплоится на стейдж/review app
@@ -26,6 +28,7 @@ jobs:
       package: ui
 
   manual-prod-approval:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     needs: [ automation-api, automation-ui ]
     runs-on: ubuntu-latest
     environment: 'prod'
