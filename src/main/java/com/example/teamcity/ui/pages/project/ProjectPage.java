@@ -6,6 +6,7 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.example.teamcity.ui.elements.BuildTypeElement;
 import com.example.teamcity.ui.pages.BasePage;
+import io.qameta.allure.Step;
 
 import java.util.List;
 
@@ -23,14 +24,17 @@ public class ProjectPage extends BasePage {
         title.shouldBe(Condition.visible, BASE_WAITING);
     }
 
+    @Step("Open Project page")
     public static ProjectPage open(String projectId) {
         return Selenide.open(PROJECT_URL.formatted(projectId), ProjectPage.class);
     }
 
+    @Step("Open build types")
     public List<BuildTypeElement> getBuildTypes() {
         return generatePageElements(buildTypeElements, BuildTypeElement::new);
     }
 
+    @Step("Run build")
     public void runBuild(String buildTypeName) {
         buildTypeList.shouldBe(Condition.visible, BASE_WAITING);
         getBuildTypes().stream().filter(buildType -> buildType.getName().text().equals(buildTypeName))

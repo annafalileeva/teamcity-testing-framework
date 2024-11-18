@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.example.teamcity.ui.pages.BasePage;
+import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -13,6 +14,7 @@ public class BuildPage extends BasePage {
     private SelenideElement title = $("[class*='BuildPageHeader__title']");
     public SelenideElement buildStatus = $("[class*='BuildPageHeader__description']");
 
+    @Step("Open Build page")
     public static BuildPage open(String buildTypeId, Long buildId) {
         return Selenide.open(VIEW_BUILD_URL.formatted(buildTypeId, buildId), BuildPage.class);
     }
