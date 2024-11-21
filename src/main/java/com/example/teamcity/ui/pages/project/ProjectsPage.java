@@ -10,6 +10,7 @@ import java.util.List;
 import com.codeborne.selenide.Condition;
 import com.example.teamcity.ui.elements.ProjectTreeElement;
 import com.example.teamcity.ui.pages.BasePage;
+import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -26,19 +27,23 @@ public class ProjectsPage extends BasePage {
         header.shouldBe(Condition.visible, BASE_WAITING);
     }
 
+    @Step("Open Projects page")
     public static ProjectsPage open() {
         return Selenide.open(PROJECTS_URL, ProjectsPage.class);
     }
 
+    @Step("Get projects")
     public List<ProjectElement> getProjects() {
         return generatePageElements(projectElements, ProjectElement::new);
     }
 
+    @Step("Search project {projectName}")
     public ProjectsPage searchProject(String projectName) {
         searchInput.val(projectName);
         return this;
     }
 
+    @Step("Get projects in search results")
     public List<ProjectTreeElement> getFoundedProjects() {
         return generatePageElements(foundedProjectElements, ProjectTreeElement::new);
     }

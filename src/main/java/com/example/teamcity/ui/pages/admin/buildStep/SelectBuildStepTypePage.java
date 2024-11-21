@@ -6,6 +6,7 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.example.teamcity.ui.elements.StepTypeElement;
 import com.example.teamcity.ui.pages.admin.buildType.EditBuildTypeBasePage;
+import io.qameta.allure.Step;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class SelectBuildStepTypePage extends EditBuildTypeBasePage {
     protected SelenideElement stepTypeList = $("table[class*='SelectBuildRunners__list']");
     protected ElementsCollection stepTypeElements = $$("tr[data-test*='runner-item']");
 
+    @Step("Open Select build step type page")
     public static SelectBuildStepTypePage open(String buildTypeId) {
         return Selenide.open(EDIT_BUILD_TYPE_URL.formatted(EDIT_MODE, buildTypeId), SelectBuildStepTypePage.class);
     }
@@ -25,10 +27,12 @@ public class SelectBuildStepTypePage extends EditBuildTypeBasePage {
         stepTypeList.shouldBe(Condition.visible, BASE_WAITING);
     }
 
+    @Step("Get step types")
     public List<StepTypeElement> getStepTypes() {
         return generatePageElements(stepTypeElements, StepTypeElement::new);
     }
 
+    @Step("Select step type")
     public <T extends EditBuildStepBasePage> T selectStepType(String typeName, Class<T> pageClass) {
         getStepTypes().stream().filter(stepType -> stepType.getName().text().equals(typeName))
                 .findFirst().get().getName().click();
