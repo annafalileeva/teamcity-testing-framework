@@ -25,9 +25,14 @@ public class RequestHelper {
                 .atMost(20, SECONDS)
                 .pollInterval(2, SECONDS)
                 .until(() -> {
-                    var status = superUserCheckRequests.<Build>getRequest(BUILDS).read(
-                            "id:" + buildId).getStatus();
-                    return status.equals(buildStatus);
+                    try {
+                        var status = superUserCheckRequests.<Build>getRequest(BUILDS).read(
+                                "id:" + buildId).getStatus();
+                        return status.equals(buildStatus);
+                    }
+                    catch (Exception e) {
+                        return false;
+                    }
                 });
     }
 }
